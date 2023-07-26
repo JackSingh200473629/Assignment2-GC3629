@@ -8,4 +8,16 @@ public class ApiResponse {
     private int totalResults;
     @SerializedName("total_pages")
     private int totalPages;
+
+    public Book[] getResults() {
+        return results;
+    }
+
+    public int getTotalResults() {
+        return totalResults;
+    }
+
+    public int getTotalPages() {
+        return totalPages;
+    }
 }
