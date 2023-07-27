@@ -36,18 +36,44 @@ public class ApiUtility {
      */
     public static ApiResponse getDataFromAPI(String searchName){
         searchName = searchName.replace(" ", "%20");
-        String url = "https://rapidapi.com/dfskGT/api/book-finder1/" + searchName;
+        String url = "https://book-finder1.p.rapidapi.com/1004da48b4msh06a08bb08747322p19f31bjsnc03543d2b3fb?name=" + searchName;
 
         HttpClient httpClient = HttpClient.newHttpClient();
-        HttpRequest httpRequest = HttpRequest.newBuilder().uri(URI.create(url)).build();
+        HttpRequest httpRequest = HttpRequest.newBuilder()
+                .uri(URI.create(url))
+                .header("X-RapidAPI-Host", "book-finder1.p.rapidapi.com")
+                .header("X-RapidAPI-Key", "1004da48b4msh06a08bb08747322p19f31bjsnc03543d2b3fb")
+                .build();
         try {
             HttpResponse<Path> response = httpClient.send(httpRequest, HttpResponse
                     .BodyHandlers
                     .ofFile(Paths.get("javaApiFetched.json")));
-        }catch(Exception e){
+        } catch(Exception e){
             e.printStackTrace();
         }
+        return ApiUtility.getDataFromFile("javaApiFetched.json");
+    }
 
+    /*This method will create objexts without storing it to the hard drive*/
+    public static ApiResponse getDataFromApiQuick(String searchName){
+        searchName = searchName.replace(" ", "%20");
+        String url = "https://book-finder1.p.rapidapi.com/1004da48b4msh06a08bb08747322p19f31bjsnc03543d2b3fb?name=" + searchName;
+
+        HttpClient httpClient = HttpClient.newHttpClient();
+        HttpRequest httpRequest = HttpRequest.newBuilder()
+                .uri(URI.create(url))
+                .header("X-RapidAPI-Host", "book-finder1.p.rapidapi.com")
+                .header("X-RapidAPI-Key", "1004da48b4msh06a08bb08747322p19f31bjsnc03543d2b3fb")
+                .build();
+        try {
+            HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse
+                    .BodyHandlers
+                    .ofString());
+            Gson gson = new Gson();
+            return gson.fromJson(response.body(), ApiResponse.class);
+        } catch(Exception e){
+            e.printStackTrace();
+        }
         return ApiUtility.getDataFromFile("javaApiFetched.json");
     }
 }
